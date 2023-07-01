@@ -3,6 +3,7 @@ package org.dolvera.springcloud.msvc.courses.models.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,8 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
+    @Column
+    @NotBlank
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
