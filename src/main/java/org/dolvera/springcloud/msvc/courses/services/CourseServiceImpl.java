@@ -1,7 +1,9 @@
 package org.dolvera.springcloud.msvc.courses.services;
 
+import org.dolvera.springcloud.msvc.courses.clients.UserClientRest;
 import org.dolvera.springcloud.msvc.courses.models.User;
 import org.dolvera.springcloud.msvc.courses.models.entity.Course;
+import org.dolvera.springcloud.msvc.courses.models.entity.CourseUser;
 import org.dolvera.springcloud.msvc.courses.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,9 @@ import java.util.Optional;
 public class CourseServiceImpl implements CourseService{
     @Autowired
     private CourseRepository repository;
+
+    @Autowired
+    private UserClientRest clientRest;
 
 
     @Override
@@ -40,17 +45,59 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
+    @Transactional
     public Optional<User> assignUser(User user, Long courseId) {
+        Optional<Course> o = repository.findById(courseId);
+        if (o.isPresent()) {
+            User userMsvc = clientRest.byId(user.getId());
+
+            Course course = o.get();
+            CourseUser courseUser = new CourseUser();
+            courseUser.setUserId(userMsvc.getId());
+
+            course.addCourseUser(courseUser);
+            repository.save(course);
+            return Optional.of(userMsvc);
+        }
+
         return Optional.empty();
     }
 
     @Override
+    @Transactional
     public Optional<User> createUser(User user, Long courseId) {
+        Optional<Course> o = repository.findById(courseId);
+        if (o.isPresent()) {
+            User userNewMsvc = clientRest.create(user);
+
+            Course course = o.get();
+            CourseUser courseUser = new CourseUser();
+            courseUser.setUserId(userNewMsvc.getId());
+
+            course.addCourseUser(courseUser);
+            repository.save(course);
+            return Optional.of(userNewMsvc);
+        }
+
         return Optional.empty();
     }
 
     @Override
+    @Transactional
     public Optional<User> deleteUser(User user, Long courseId) {
+        Optional<Course> o = repository.findById(courseId);
+        if (o.isPresent()) {
+            User userMsvc = clientRest.byId(user.getId());
+
+            Course course = o.get();
+            CourseUser courseUser = new CourseUser();
+            courseUser.setUserId(userMsvc.getId());
+
+            course.removeCourseUser(courseUser);
+            repository.save(course);
+            return Optional.of(userMsvc);
+        }
+
         return Optional.empty();
     }
 }
