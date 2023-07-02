@@ -1,5 +1,6 @@
 package org.dolvera.springcloud.msvc.courses.services;
 
+import org.dolvera.springcloud.msvc.courses.models.User;
 import org.dolvera.springcloud.msvc.courses.models.entity.Course;
 import org.dolvera.springcloud.msvc.courses.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +37,20 @@ public class CourseServiceImpl implements CourseService{
     @Transactional
     public void delete(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public Optional<User> assignUser(User user, Long courseId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> createUser(User user, Long courseId) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> deleteUser(User user, Long courseId) {
+        return Optional.empty();
     }
 }

@@ -1,6 +1,7 @@
 package org.dolvera.springcloud.msvc.courses.models.entity;
 
 import lombok.Data;
+import org.dolvera.springcloud.msvc.courses.models.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -22,10 +23,16 @@ public class Course {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "course_id")
     private List<CourseUser> courseUsers;
+
+    //add map model
+    @Transient
+    private List<User> users;
 
     public Course() {
         courseUsers = new ArrayList<>();
+        users = new ArrayList<>();
     }
 
     public void addCourseUser(CourseUser courseUser) {
